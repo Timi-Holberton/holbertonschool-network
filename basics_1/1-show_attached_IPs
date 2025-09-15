@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Afficher toutes les adresses IPv4 actives de la machine
+# ifconfig = affiche la configuration des interfaces réseau
+# grep -Eo = extraction avec regex (-E pour regex étendue, -o pour afficher seulement la correspondance)
+# 'inet [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' = cherche "inet " suivi d'une adresse IPv4
+# awk '{print $2}' = affiche seulement le 2ème champ (l'adresse IP sans "inet")
+ifconfig | grep -Eo 'inet [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | awk '{print $2}'
