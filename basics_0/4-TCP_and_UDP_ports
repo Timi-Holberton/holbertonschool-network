@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
-# Script affichant les ports TCP et UDP en écoute avec le PID et le nom du programme associé
-
-echo "=== Ports en écoute (TCP/UDP) ==="
-sudo ss -tulnp
+# Affiche les ports TCP/UDP et sockets UNIX en écoute avec PID/Programme
+netstat -l --program
