@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Sauvegarder le fichier hosts original
+cp /etc/hosts /etc/hosts.backup
+
+# Remplacer 127.0.0.1 localhost par 127.0.0.2 localhost dans le fichier /etc/hosts
+# sed -i = modifier le fichier directement
+# 's/ancien/nouveau/' = substituer "ancien" par "nouveau"
+# 127.0.0.1.*localhost = cherche 127.0.0.1 suivi de n'importe quoi puis localhost
+sed -i 's/127.0.0.1.*localhost/127.0.0.2 localhost/' /etc/hosts
+
+# Ajouter une nouvelle ligne à la fin du fichier /etc/hosts
+# >> = ajouter à la fin du fichier (sans écraser le contenu existant)
+echo "8.8.8.8 facebook.com" >> /etc/hosts
