@@ -1,16 +1,45 @@
 #!/usr/bin/env bash
-# Configuration d'un serveur Ubuntu pour :
-# localhost résout vers 127.0.0.2
-# facebook.com résout vers 8.8.8.8
+# Script to change localhost resolution to 127.0.0.2 and facebook.com to 8.8.8.8
+# This script modifies /etc/hosts file
 
-# Copier /etc/hosts vers un fichier temporaire
-cp /etc/hosts ~/temp
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root (use sudo)"
+   exit 1
+fi
 
-# Remplacer 127.0.0.1 par 127.0.0.2 dans le fichier temporaire
-sed -i s/127.0.0.1/127.0.0.2/ ~/temp
+# Sauvegarder le fichier hosts original
+cp /etc/hosts /etc/hosts.backup.$(date +%Y%m%d_%H%M%S)
 
-# Ajouter l'entrée facebook.com
-echo "8.8.8.8 facebook.com" >> ~/temp
+# Créer un fichier temporaire pour le nouveau contenu hosts
+TEMP_HOSTS=$(mktemp)
 
-# Remplacer le fichier /etc/hosts par le fichier temporaire modifié
-cp -f ~/temp /etc/hosts
+# Lire le fichier hosts actuel et le modifier
+while IFS= read -r line; do
+    # Ignorer les entrées localhost existantes qui pointent vers 127.0.0.1
+    if [[ $line =~ ^127\.0\.0\.1[[:space:]]+localhost ]]; then
+        continue
+    # Ignorer les entrées facebook.com existantes
+    elif [[ $line =~ facebook\.com ]]; then
+        continue
+    else
+        echo "$line" >> "$TEMP_HOSTS"
+    fi
+done < /etc/hosts
+
+# Ajouter nos entrées personnalisées
+echo "127.0.0.2 localhost" >> "$TEMP_HOSTS"
+echo "8.8.8.8 facebook.com" >> "$TEMP_HOSTS"
+
+# Remplacer le fichier hosts par notre version modifiée
+mv "$TEMP_HOSTS" /etc/hosts
+
+# Définir les permissions appropriées
+chmod 644 /etc/hosts
+
+echo "Configuration DNS mise à jour avec succès !"
+echo "localhost résout maintenant vers 127.0.0.2"
+echo "facebook.com résout maintenant vers 8.8.8.8"
+echo ""
+echo "ATTENTION : N'oubliez pas de remettre localhost à 127.0.0.1 quand vous aurez terminé !"
+echo "Une sauvegarde de votre fichier hosts original a été créée."
