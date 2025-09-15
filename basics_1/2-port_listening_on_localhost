@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Script pour écouter sur le port 98 de localhost
+# nc = netcat, outil pour créer des connexions réseau
+# -l = mode écoute (listen)
+# -p 98 = spécifie le port 98
+# localhost = écoute seulement sur l'interface locale
+nc -l -p 98 localhost
