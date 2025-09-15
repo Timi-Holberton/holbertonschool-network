@@ -6,7 +6,6 @@ echo "=== Ports en écoute (TCP/UDP) ==="
 echo "Active Internet connections (only servers)"
 sudo ss -tulnp
 
-echo
 # Affichage des sockets UNIX
 echo "Active UNIX domain sockets (only servers)"
 sudo ss -xlp
