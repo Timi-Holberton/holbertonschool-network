@@ -18,7 +18,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Sauvegarde du fichier hosts avant modification
-cp /etc/hosts /etc/hosts.backup.$(date +%F_%T)
+cp /etc/hosts "/etc/hosts.backup.$(date +%F_%T)"
 echo "[INFO] Sauvegarde de /etc/hosts effectuée : /etc/hosts.backup.$(date +%F_%T)"
 
 # Supprime d'éventuelles lignes existantes contenant "localhost" ou "facebook.com"
