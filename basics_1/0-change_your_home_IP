@@ -1,45 +1,8 @@
 #!/usr/bin/env bash
-# Script to change localhost resolution to 127.0.0.2 and facebook.com to 8.8.8.8
-# This script modifies /etc/hosts file
+# Configuration d'un serveur Ubuntu pour :
+# localhost résout vers 127.0.0.2
+# facebook.com résout vers 8.8.8.8
 
-# Check if running as root
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root (use sudo)"
-   exit 1
-fi
-
-# Sauvegarder le fichier hosts original
-cp /etc/hosts /etc/hosts.backup.$(date +%Y%m%d_%H%M%S)
-
-# Créer un fichier temporaire pour le nouveau contenu hosts
-TEMP_HOSTS=$(mktemp)
-
-# Lire le fichier hosts actuel et le modifier
-while IFS= read -r line; do
-    # Ignorer les entrées localhost existantes qui pointent vers 127.0.0.1
-    if [[ $line =~ ^127\.0\.0\.1[[:space:]]+localhost ]]; then
-        continue
-    # Ignorer les entrées facebook.com existantes
-    elif [[ $line =~ facebook\.com ]]; then
-        continue
-    else
-        echo "$line" >> "$TEMP_HOSTS"
-    fi
-done < /etc/hosts
-
-# Ajouter nos entrées personnalisées
-echo "127.0.0.2 localhost" >> "$TEMP_HOSTS"
-echo "8.8.8.8 facebook.com" >> "$TEMP_HOSTS"
-
-# Remplacer le fichier hosts par notre version modifiée
-mv "$TEMP_HOSTS" /etc/hosts
-
-# Définir les permissions appropriées
-chmod 644 /etc/hosts
-
-echo "Configuration DNS mise à jour avec succès !"
-echo "localhost résout maintenant vers 127.0.0.2"
-echo "facebook.com résout maintenant vers 8.8.8.8"
-echo ""
-echo "ATTENTION : N'oubliez pas de remettre localhost à 127.0.0.1 quand vous aurez terminé !"
-echo "Une sauvegarde de votre fichier hosts original a été créée."
+# printf = plus portable que echo
+# > /etc/hosts = redirection complète (écrase le fichier)
+printf "127.0.0.1\tubuntu\n127.0.0.2\tlocalhost\n8.8.8.8\tfacebook.com\n" > /etc/hosts
