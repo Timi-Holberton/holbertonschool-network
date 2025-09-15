@@ -1,13 +1,9 @@
-#!/bin/bash
-
-# Vérifie si un argument est fourni
-if [ $# -eq 0 ]; then
-    echo "Usage: 5-is_the_host_on_the_network {IP_ADDRESS}"
-    exit 1
+#!/usr/bin/env bash
+# Vérifie si un argument (adresse IP) a été passé au script
+if [ -z "$1" ]; then
+    echo "Usage: 5-is_the_host_on_the_network {IP_ADDRESS}"  # Affiche la manière d'utiliser le script si aucun argument n'est fourni
+    exit 1  # Quitte le script avec un code d'erreur
 fi
 
-# Récupère l'adresse IP passée en argument
-IP="$1"
-
-# Ping l'adresse IP 5 fois
-ping -c 5 "$IP"
+# Envoie 5 paquets ping à l'adresse IP fournie
+ping -c 5 "$1"  # "$1" correspond au premier argument passé au script (adresse IP)
