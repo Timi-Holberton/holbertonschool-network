@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Configuration d'un serveur Ubuntu pour :
 # localhost résout vers 127.0.0.2
 # facebook.com résout vers 8.8.8.8
