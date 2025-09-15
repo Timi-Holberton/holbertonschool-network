@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Script qui affiche les ports TCP/UDP et les sockets UNIX en écoute avec les PID et programmes associés
 
+# Affichage des ports TCP/UDP
 echo "=== Ports en écoute (TCP/UDP) ==="
 echo "Active Internet connections (only servers)"
 sudo ss -tulnp
 
+echo
+# Affichage des sockets UNIX
 echo "Active UNIX domain sockets (only servers)"
 sudo ss -xlp
