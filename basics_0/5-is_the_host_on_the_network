@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Vérifie si un argument est fourni
+if [ $# -eq 0 ]; then
+    echo "Usage: 5-is_the_host_on_the_network {IP_ADDRESS}"
+    exit 1
+fi
+
+# Récupère l'adresse IP passée en argument
+IP="$1"
+
+# Ping l'adresse IP 5 fois
+ping -c 5 "$IP"

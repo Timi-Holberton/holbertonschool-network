@@ -1,0 +1,5 @@
+#!/bin/bash
+# Script pour afficher les ports en écoute avec PID et programme associé
+
+echo "=== Ports en écoute (TCP/UDP) ==="
+sudo lsof -i -P -n | grep LISTEN
