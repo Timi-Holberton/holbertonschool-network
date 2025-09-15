@@ -1,8 +1,39 @@
 #!/usr/bin/env bash
-# Configuration d'un serveur Ubuntu pour :
-# localhost résout vers 127.0.0.2
-# facebook.com résout vers 8.8.8.8
+# ==========================================================
+# Script : 0-change_your_home_IP
+# Objectif : Configurer la résolution de noms sur Ubuntu
+# Auteur : Thérèse-Marie Lefoulon
+# Description :
+#   - Modifie le fichier /etc/hosts pour que :
+#       * "localhost" pointe vers 127.0.0.2
+#       * "facebook.com" pointe vers 8.8.8.8
+#   - Sauvegarde le fichier /etc/hosts original avant modification.
+#   - ATTENTION : après utilisation, penser à restaurer localhost à 127.0.0.1
+# ==========================================================
 
-# printf = plus portable que echo
-# > /etc/hosts = redirection complète (écrase le fichier)
-printf "127.0.0.1\tubuntu\n127.0.0.2\tlocalhost\n8.8.8.8\tfacebook.com\n" > /etc/hosts
+# Vérifie que le script est exécuté avec sudo (droits administrateur)
+if [ "$EUID" -ne 0 ]; then
+  echo "Veuillez exécuter ce script avec sudo."
+  exit 1
+fi
+
+# Sauvegarde du fichier hosts avant modification
+cp /etc/hosts /etc/hosts.backup.$(date +%F_%T)
+echo "[INFO] Sauvegarde de /etc/hosts effectuée : /etc/hosts.backup.$(date +%F_%T)"
+
+# Supprime d'éventuelles lignes existantes contenant "localhost" ou "facebook.com"
+sed -i '/localhost/d' /etc/hosts
+sed -i '/facebook.com/d' /etc/hosts
+
+# Ajoute les nouvelles règles de résolution
+echo "127.0.0.2   localhost" >> /etc/hosts
+echo "8.8.8.8     facebook.com" >> /etc/hosts
+
+# Confirmation
+echo "[INFO] Modifications appliquées avec succès."
+echo "[INFO] localhost -> 127.0.0.2"
+echo "[INFO] facebook.com -> 8.8.8.8"
+echo "[INFO] Vous pouvez tester avec : ping localhost ou ping facebook.com"
+
+# Fin du script
+
